@@ -20,7 +20,6 @@ public class SecurityConfigurations {
 
     @Autowired
     private SecurityFilter securityFilter;
-
     private static final String[] AUTH_WHITELIST = {
             "/swagger-resources",
             "/swagger-resources/**",
