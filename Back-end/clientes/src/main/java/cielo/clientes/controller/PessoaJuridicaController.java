@@ -10,6 +10,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,6 +26,9 @@ public class PessoaJuridicaController {
     @PostMapping
     @Transactional
     public ResponseEntity cadastrar(@RequestBody @Valid DadosCadastrarPessoaJuridica dados, UriComponentsBuilder uriBuilder){
+        if(!verificaEmail(dados.email())){
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("E-mail inválido!");
+        }
         //verifica se o usuário já existe
         List<PessoaJuridica> verificacaoCnpj = repository.findByCnpj(dados.cnpj());
         if(verificacaoCnpj.size()==1){
@@ -101,6 +106,18 @@ public class PessoaJuridicaController {
             repository.save(pessoaJuridica);
             return ResponseEntity.noContent().build();
         }
+    }
+    public boolean verificaEmail(String email){
+        boolean isEmailIdValid = false;
+        if (email != null && email.length() > 0) {
+            String expression = "^[\\w\\.-]+@([\\w\\-]+\\.)+[A-Z]{2,4}$";
+            Pattern pattern = Pattern.compile(expression, Pattern.CASE_INSENSITIVE);
+            Matcher matcher = pattern.matcher(email);
+            if (matcher.matches()) {
+                isEmailIdValid = true;
+            }
+        }
+        return isEmailIdValid;
     }
 
 

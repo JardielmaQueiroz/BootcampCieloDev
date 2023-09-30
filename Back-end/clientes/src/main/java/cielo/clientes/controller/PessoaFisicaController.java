@@ -12,6 +12,8 @@ import org.springframework.web.util.UriComponentsBuilder;
 import java.util.List;
 import java.util.*;
 import cielo.clientes.infra.fila.Fila;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 
 
@@ -31,6 +33,9 @@ public class PessoaFisicaController {
     @PostMapping
     @Transactional
     public ResponseEntity cadastrar(@RequestBody @Valid DadosCadastroPessoaFisica dados, UriComponentsBuilder uriBuilder){
+        if(!verificaEmail(dados.email())){
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("E-mail inválido!");
+        }
         //verifica se o usuário já existe
         List<PessoaFisica> verificacaoCpf = repository.findByCpf(dados.cpf());
         if(verificacaoCpf.size()==1){
@@ -109,6 +114,19 @@ public class PessoaFisicaController {
             repository.save(pessoafisica);
             return ResponseEntity.noContent().build();
         }
+    }
+
+    public boolean verificaEmail(String email){
+        boolean isEmailIdValid = false;
+        if (email != null && email.length() > 0) {
+            String expression = "^[\\w\\.-]+@([\\w\\-]+\\.)+[A-Z]{2,4}$";
+            Pattern pattern = Pattern.compile(expression, Pattern.CASE_INSENSITIVE);
+            Matcher matcher = pattern.matcher(email);
+            if (matcher.matches()) {
+                isEmailIdValid = true;
+            }
+        }
+        return isEmailIdValid;
     }
 
 
