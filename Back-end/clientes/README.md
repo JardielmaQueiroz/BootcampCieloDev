@@ -1,6 +1,6 @@
 # Pré-cadastro de clientes
 
- Pré-cadastro de clientes
+Projeto desenvolvido durante o bootcamp da Ada + Cielo.
 
 ## Pré-requisitos
 
