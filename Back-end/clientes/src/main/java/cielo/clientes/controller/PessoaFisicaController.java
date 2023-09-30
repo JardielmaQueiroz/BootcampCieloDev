@@ -62,6 +62,18 @@ public class PessoaFisicaController {
         return repository.findAll().stream().map(DadosListagemPessoaFisica::new).toList();
     }
 
+    @GetMapping("/ativos")
+    public List<DadosListagemAtivosPessoaFisica> listarAtivos(){
+        List<PessoaFisica> lista =repository.findAll();
+        ArrayList<PessoaFisica> retorno = new ArrayList<PessoaFisica>();
+        for(PessoaFisica item : lista){
+            if(item.getAtivo()){
+                retorno.add(item);
+            }
+        }
+        return retorno.stream().map(DadosListagemAtivosPessoaFisica::new).toList();
+    }
+
     @PutMapping
     @Transactional
     public ResponseEntity atualizar(@RequestBody @Valid DadosAtualizarPessoaFisica dados){
