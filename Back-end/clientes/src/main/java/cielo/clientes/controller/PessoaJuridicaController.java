@@ -1,5 +1,6 @@
 package cielo.clientes.controller;
 
+import cielo.clientes.domain.PessoaFisica.DadosListagemAtivosPessoaFisica;
 import cielo.clientes.domain.PessoaFisica.PessoaFisica;
 import jakarta.validation.Valid;
 import cielo.clientes.domain.PessoaJuridica.*;
@@ -10,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -50,6 +52,18 @@ public class PessoaJuridicaController {
     @GetMapping
     public List<DadosListagemPessoaJuridica> listar(){
         return repository.findAll().stream().map(DadosListagemPessoaJuridica::new).toList();
+    }
+
+    @GetMapping("/ativos")
+    public List<DadosListagemAtivosPessoaJuridica> listarAtivos(){
+        List<PessoaJuridica> lista =repository.findAll();
+        ArrayList<PessoaJuridica> retorno = new ArrayList<PessoaJuridica>();
+        for(PessoaJuridica item : lista){
+            if(item.getAtivo()){
+                retorno.add(item);
+            }
+        }
+        return retorno.stream().map(DadosListagemAtivosPessoaJuridica::new).toList();
     }
 
     @PutMapping
