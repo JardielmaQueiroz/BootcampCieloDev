@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 import java.util.List;
 import java.util.*;
+import cielo.clientes.infra.fila.Fila;
 
 
 
@@ -23,6 +24,9 @@ public class PessoaFisicaController {
     @Autowired
     private PessoaFisicaRepository repository;
 
+    @Autowired
+    private Fila<PessoaFisica> fila;
+
 
     @PostMapping
     @Transactional
@@ -34,6 +38,7 @@ public class PessoaFisicaController {
         }else {
             var pessoafisica = new PessoaFisica(dados);
             repository.save(pessoafisica);
+            fila.adicionar(pessoafisica);
             var uri = uriBuilder.path("/pessoafisica/{id}").buildAndExpand(pessoafisica.getId()).toUri();
             return ResponseEntity.created(uri).body(new DadosDetalhamentoPessoaFisica(pessoafisica));
         }
@@ -74,6 +79,7 @@ public class PessoaFisicaController {
         }else {
             var pessoafisica =repository.getReferenceById(dados.id());
             pessoafisica.atualizar(dados);
+            fila.adicionar(pessoafisica);
             return ResponseEntity.ok(new DadosDetalhamentoPessoaFisica(pessoafisica));
         }
     }
