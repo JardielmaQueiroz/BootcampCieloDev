@@ -22,8 +22,8 @@ Certifique-se de ter instalado o seguinte antes de começar:
 
 ## Getting started 
 
-1.Clone o repositório;
-2.Navegue até o diretório do projeto: `cd nome-do-projeto`;
+1. Clone o repositório;
+2. Navegue até o diretório do projeto: `cd nome-do-projeto`;
 3. Compile o projeto: `mvn clean install`;
 4. Execute o aplicativo: `java -jar target/nome-do-jar.jar`.
 
